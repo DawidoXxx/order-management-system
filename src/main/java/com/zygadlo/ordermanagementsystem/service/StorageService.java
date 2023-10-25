@@ -35,18 +35,19 @@ public class StorageService {
 
     //Store order or database file to compute
     //isOrderFile -> indicate where we gonna save file
-    //newFileName -> its new more user friendly name of database or order
+    //newFileName -> its new, more user friendly name of database or order with extension
     public void uploadFile(MultipartFile file,boolean isOrderFile,String newFileName){
         String path;
         if (isOrderFile) {
             path = orderToComputePath;
             createIfNotExist(path);
-            deleteFile(new File(path), file.getName());
+//            deleteFile(new File(path), file.getName());
+            deleteFile(new File(path), newFileName);
         }
         else{
             path = databasesPath;
             createIfNotExist(path);
-            deleteFile(new File(path),file.getName());
+            deleteFile(new File(path), newFileName);
         }
 
         if (file.isEmpty())

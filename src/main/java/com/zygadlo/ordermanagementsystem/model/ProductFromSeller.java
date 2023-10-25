@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class ProductFromSeller {
 
@@ -15,6 +14,10 @@ public class ProductFromSeller {
     private String sellersCode;
     private int amountInPack;
     private String codeEanAll;
+
+    public ProductFromSeller() {
+        priority = 1;
+    }
 
     public ProductFromSeller setSellerName(String name){
         this.sellerName = name;

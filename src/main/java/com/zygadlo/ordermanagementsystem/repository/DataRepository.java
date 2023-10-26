@@ -1,5 +1,6 @@
 package com.zygadlo.ordermanagementsystem.repository;
 
+import com.zygadlo.ordermanagementsystem.model.DataFromDatabase;
 import com.zygadlo.ordermanagementsystem.model.FileSettings;
 import com.zygadlo.ordermanagementsystem.model.Product;
 
@@ -8,6 +9,6 @@ import java.util.Map;
 
 public interface DataRepository {
 
-    Map<String, Product> getDataFromDatabase(File file, FileSettings settings);
+    Map<String, DataFromDatabase> getDataFromDatabase(File file, FileSettings settings);
 
 }

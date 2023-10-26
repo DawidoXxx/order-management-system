@@ -2,7 +2,6 @@ package com.zygadlo.ordermanagementsystem.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -15,37 +14,10 @@ public class ProductFromSeller {
     private int amountInPack;
     private String codeEanAll;
 
-    public ProductFromSeller() {
-        priority = 1;
-    }
-
-    public ProductFromSeller setSellerName(String name){
-        this.sellerName = name;
-        return this;
-    }
-
-    public ProductFromSeller setPrice(Double price){
-        this.price = price;
-        return this;
-    }
-
-    public ProductFromSeller setPriority(int priority){
+    public ProductFromSeller(String sellerName, int priority, Double price, String sellersCode) {
+        this.sellerName = sellerName;
         this.priority = priority;
-        return this;
-    }
-
-    public ProductFromSeller setSellerCode(String sellerCode){
-        this.sellersCode = sellerCode;
-        return this;
-    }
-
-    public ProductFromSeller setAmountInPack(int amountInPack){
-        this.amountInPack = amountInPack;
-        return this;
-    }
-
-    public ProductFromSeller setCodeEan(String ean){
-        this.codeEanAll = ean;
-        return this;
+        this.price = price;
+        this.sellersCode = sellersCode;
     }
 }

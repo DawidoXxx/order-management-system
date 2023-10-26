@@ -1,10 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Order Menagement Settings</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/sticky-footer/">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="js/js3.4.1.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script src="js/jquery.form.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+      var hash = window.location.hash;
+      $(hash).addClass('show');
+      $('.btn').removeClass('disabled');
+    });
+
+    </script>
+
+    <script>
+    $(document).ready(function(){
+        $('.collapse').on('show.bs.collapse', function () {
+            $('.collapse.show').each(function(){
+                $(this).collapse('hide');
+            });
+        });
+    });
+    </script>
+
+    <script>
+    $(document).on('change', '.custom-file-input', function (event) {
+        $(this).next('.custom-file-label').html(event.target.files[0].name);
+    });
+    </script>
+
+    <script>
+    $(window).on("load",function(){
+        $('.loading').fadeOut(2000);
+        $('selector').css('cursor', 'pointer');
+        document.getElementById("btd2").style['pointer-events'] = 'auto';
+        document.getElementById("btd3").style['pointer-events'] = 'auto';
+    });
+    </script>
+
+    <script>
+    $(document).ready(function(){
+        $("#dbUpdate").on("submit", function(){
+            $('[data-toggle=collapse]').prop('disabled',true);
+            document.getElementById("btd2").style['pointer-events'] = 'none';
+            document.getElementById("btd3").style['pointer-events'] = 'none';
+            $('.btn').addClass('disabled');
+            $('.loading').fadeIn();
+        });
+    });
+    </script>
+
+    <script>
+    $(document).ready(function () {
+        $.getJSON("js/orderTo.json", function (result) {
+            $.each(result, function (i, word) {
+                $("#inputOrderTo").append("<option>"+word+"</option>");
+            });
+        });
+    });
+</script>
+
 </head>
 <body>
+
+<!--  Create form for changing settings of file you wanna provide for a program or
+        file this program gonna create, order.txt or f.e. wabar.csv-->
+<div class="container-fluid" style="max-width: 400px; padding-top: 20px">
+    <div class="card" style="width: 38rem;">
+        <div class="card-body" style="padding: 2.25rem;">
+            <h5 class="card-title">Config</h5>
+            <h6 class="card-subtitle mb-2 text-muted">OrderManagement</h6>
+            <p class="card-text">Just be carefull changing settings :)</p>
+            <form class="form-group" method="POST" action="/saveSettingsForFile">
+                <label for="whatFile">Choose a file to change a settings</label><br/>
+
+                <!-- field for file name -->
+                <select class="form-control" name="whatFile" id="whatFile">
+                    <option value="OrderToProcess">Order input file</option>
+                    <option value="OrderToSendMaster">Master Media output file</option>
+                    <option value="OrderToSendWabar">Wabar output file</option>
+                    <option value="OrderToSendSpizarnia">Spiżarnia output file</option>
+                    <option value="OrderToSendLemonex">Lemonex output file</option>
+                    <option value="OrderToSendKamix">Kamix output file</option>
+                    <option value="OrderToSendStanro">Stanro output file</option>
+                    <option value="OrderToSendMain">Main output file</option>
+                    <option value="OrderNotFound">Not found file</option>
+                </select><br/>
+
+
+                <!-- field for separator -->
+                <label>Provide separator</label><br/>
+                <input class="form-control" type="text" name="separator"><br/>
+
+                <label>Provide extension of a file</label><br/>
+                <input class="form-control" type="text" name="extension"><br/>
+                <!-- field for extension? is it really important? -->
+
+                <!--  fields with order to pick  -->
+                <!--  ean // name // amount //   -->
+                <label>Pick an order with fields gonna be displayed in a file</label>
+                <br>
+                <label for="eanOrder">Ean: </label>
+                <input type="text" name="eanOrder" id="eanOrder">
+                <br>
+                <label for="nameOrder">Name: </label>
+                <input type="text" name="nameOrder" id="nameOrder">
+                <br>
+                <label for="amountOrder">Amount: </label>
+                <input type="text" name="amountOrder" id="amountOrder">
+                <br>
+                <label for="sallerCodeOrder">Seller's code: </label>
+                <input type="text" name="sallerCodeOrder" id="sallerCodeOrder">
+                <br>
+                <label for="priceOrder">Price: </label>
+                <input type="text" name="priceOrder" id="priceOrder">
+                <br>
+                <label for="none">Empty: </label>
+                <input type="text" name="none" id="none">
+                <br>
+
+                <input class="btn btn-success" type="submit" value="Save">
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" style="max-width: 400px; padding-top: 20px">
+    <div class="card" style="width: 38rem;">
+        <div class="card-body" style="padding: 2.25rem;">
+            <h5 class="card-title">Licencja</h5>
+            <form class="form-group" method="POST" action="/saveLicenseDate">
+                Pick time for license
+                <select class="form-control" name="time" id="time">
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="365">365</option>
+                    <option value="none">No limit</option>
+                </select>
+                <div style="margin-top: 10px;">
+                    <small >Press button to create license</small>
+                    <input class="btn btn-success" type="submit" value="Create">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Widoczność tylko dla zalogowanego użytkownika -->
+<!--<a th:if="${#authentication.isAuthenticated()}" th:href="@{/logout}">Wyloguj</a>-->
+<div class="container-fluid" style="max-width: 400px; padding-top: 20px">
+    <div class="card" style="width: 38rem;">
+        <div class="card-body" style="padding: 2.25rem;">
+            <h5 class="card-title">Database paths</h5>
+            <form class="form-group" id="folderForm" method="post" action="/saveDirectoryData">
+                Pick shop for database path update
+                <select class="form-control" name="shopName" id="shopName">
+                    <option value="Spiżarnia">Spiżarnia</option>
+                    <option value="Master Media">Master Media</option>
+                    <option value="Wabar">Wabar</option>
+                    <option value="Lemonex">Lemonex</option>
+                    <option value="Kamix">Kamix</option>
+                    <option value="Stanro">Stanro</option>
+                </select>
+                <div style="margin-top: 10px;">Paste path to this file</div>
+                <input class="form-control" type="text" name="shopDir">
+                <div style="margin-top: 10px;">
+                    <small >Press button to save directory</small>
+                    <input class="btn btn-success" type="submit" value="Save">
+                </div>
+            </form>
+
+            <a th:href="@{/settingsPage/delete/shopDirectory}">
+                <input style="display: block; margin-left: auto; margin-right: auto" class="btn btn-info" value="Delete shop directories">
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<!-- Save shops you wanna make order to -->
+<div class="container-fluid" style="max-width: 400px; padding-top: 20px">
+    <div class="card" style="width: 38rem;">
+        <div class="card-body" style="padding: 2.25rem;">
+            <h5 class="card-title">Shop names</h5>
+            <form class="form-group"  method="post" action="/saveMyShopData">
+                <div style="margin-top: 10px;">Write your shop name</div>
+                <input class="form-control" type="text" name="myShopName">
+                <div style="margin-top: 10px;">
+                    <small >Press button to save shop</small>
+                    <input class="btn btn-success" type="submit" value="Save">
+                </div>
+            </form>
+
+            <a th:href="@{/settingPage/delete/myShopList}">
+                <input style="display: block; margin-left: auto; margin-right: auto" class="btn btn-info" value="Delete shops">
+            </a>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid" style="max-width: 400px; padding-top: 20px; padding-bottom: 20px">
+    <div class="card" style="width: 38rem;">
+        <div class="card-body" style="padding: 2.25rem;">
+            <a th:href="@{/logout}">
+                <input style="display: block; margin-left: auto; margin-right: auto" class="btn btn-info" value="Wyloguj">
+            </a>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

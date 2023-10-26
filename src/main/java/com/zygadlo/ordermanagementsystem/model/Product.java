@@ -30,7 +30,15 @@ public class Product {
         this.ean = ean;
         this.name = name;
         this.amount = amount;
-        this.searchNames = "";
+        this.searchNames = name;
+        productsFromSellers = new ArrayList<>();
+    }
+
+    public Product(String ean, String name) {
+        this.ean = ean;
+        this.name = name;
+        this.searchNames = name;
+        productsFromSellers = new ArrayList<>();
     }
 
     public void addProductFromSeller(@NonNull ProductFromSeller product){

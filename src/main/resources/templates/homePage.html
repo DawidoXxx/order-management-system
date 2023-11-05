@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org" class="h-100" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Order Menagement</title>
+
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.4/examples/sticky-footer/">
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+        .container-fluid {
+            margin-top: 10px;
+        }
+
+        .no1 {
+            border-color: #545b62;
+            box-shadow: 0 0 0 .2rem rgba(130,138,145,.5);
+            margin-top: 3px;
+            align: middle;
+            width: 956px;
+        }
+
+        .no2 {
+            border-color: #007bff;
+            box-shadow: 0 0 0 .2rem rgba(38,143,255,.5);
+            margin-top: 3px;
+            align: middle;
+            width: 956px;
+        }
+        .no3 {
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 .2rem rgba(58,176,195,.5);
+            margin-top: 3px;
+            align: middle;
+            width: 956px;
+        }
+        .no4 {
+            border-color: #28a745;
+            box-shadow: 0 0 0 .2rem rgba(72,180,97,.5);
+            margin-top: 3px;
+            align: middle;
+            width: 956px;
+        }
+
+        .form-check-input {
+            margin-left: 0px;
+
+        }
+
+        .pad {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-align: center;
+        }
+
+        .pliczek::after {
+            content: "Wybierz plik";
+        }
+
+        .content {
+            display:none;
+        }
+
+        .preload {
+            width:100px;
+            height: 100px;
+            position: fixed;
+            top: 50%;
+            left: 50%;}
+
+         .row {
+            margin-right: 0px;
+            margin-left: 0px;
+         }
+
+        #progressBar {
+	        width:0px;
+	        height:5px;
+	        background-color:#F44336;
+	        position:relative;
+	        display:none;
+        }
+
+        #progressBar.active {
+	        display:block;
+	        transition: 3s linear width;
+	        -webkit-transition: 3s linear width;
+	        -moz-transition: 3s linear width;
+	        -o-transition: 3s linear width;
+	        -ms-transition: 3s linear width;
+        }
+
+        * {
+            cursor: pointer;
+        }
+
+    </style>
+
+  <script src="js/js3.4.1.js"></script>
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <script src="js/jquery.form.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <script>
+    $(document).ready(function() {
+      var hash = window.location.hash;
+      $(hash).addClass('show');
+      $('.btn').removeClass('disabled');
+    });
+
+    </script>
+
+  <script>
+    $(document).ready(function(){
+        $('.collapse').on('show.bs.collapse', function () {
+            $('.collapse.show').each(function(){
+                $(this).collapse('hide');
+            });
+        });
+    });
+    </script>
+
+  <script>
+    $(document).on('change', '.custom-file-input', function (event) {
+        $(this).next('.custom-file-label').html(event.target.files[0].name);
+    });
+    </script>
+
+  <script>
+    $(window).on("load",function(){
+        $('.loading').fadeOut(2000);
+        $('selector').css('cursor', 'pointer');
+        document.getElementById("btd2").style['pointer-events'] = 'auto';
+        document.getElementById("btd3").style['pointer-events'] = 'auto';
+    });
+    </script>
+
+  <script>
+    $(document).ready(function(){
+        $("#dbUpdate").on("submit", function(){
+            $('[data-toggle=collapse]').prop('disabled',true);
+            document.getElementById("btd2").style['pointer-events'] = 'none';
+            document.getElementById("btd3").style['pointer-events'] = 'none';
+            $('.btn').addClass('disabled');
+            $('.loading').fadeIn();
+        });
+    });
+    </script>
+
+</head>
+<body>
+
+<div class="loading" style="z-index: 1; position: absolute; top: 49px; left: 49%;"><img src="img/loading2.gif" style="width: 40px;"></div>
+<div class="container-fluid" style="margin-top: 1px; cursor:initial;">
+
+  <!-- Menu -->
+
+  <div class="row justify-content-md-center" id="accordion">
+    <div class="btn-group" role="group" aria-label="MenuBox">
+      <a id="but1" href="#tab1" style="color:#fff;text-decoration: none">
+        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#tab1" aria-expanded="true" aria-controls="tab1" data-parent="#accordion" style="border-top-left-radius: 5pt; border-bottom-left-radius: 5pt; border-top-right-radius: 0pt; border-bottom-right-radius: 0pt;">
+          1. Dodawanie baz danych
+        </button>
+      </a>
+      <a id="but2" href="#tab2" style="color:#fff;text-decoration: none">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#tab2" aria-expanded="false" aria-controls="tab2" data-parent="#accordion" style="border-radius: 0pt;">
+          2. Dodawanie plików z zamówieniem
+        </button>
+      </a>
+      <a id="but3" href="#tab3" style="color:#fff;text-decoration: none">
+        <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#tab3" aria-expanded="false" aria-controls="tab3" data-parent="#accordion" style="border-radius: 0pt;">
+          3. Generowanie zamówień
+        </button>
+      </a>
+      <a id="but4" href="#tab4" style="color:#fff;text-decoration: none">
+        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#tab4" aria-expanded="false" aria-controls="tab4" data-parent="#accordion" style="border-radius: 0pt;">
+          4. Otwórz folder z zamówieniami
+        </button>
+      </a>
+      <!--Add-->
+      <a id="but5" href="#tab5" style="color:#fff;text-decoration: none">
+        <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#tab5" aria-expanded="false" aria-controls="tab5" data-parent="#accordion" style="border-radius: 0pt;">
+          5. Sprawdzanie zamówień
+        </button>
+      </a>
+      <!--Add-->
+      <a id="but6" href="#tab6" style="color:#fff;text-decoration: none">
+        <button class = "btn btn-info" type="button" data-toggle="collapse" data-target="#tab6" aria-expanded="false" aria-controls="tab6" data-parent="#accordion" style="border-top-right-radius: 5pt; border-bottom-right-radius: 5pt; border-top-left-radius: 0pt; border-bottom-left-radius: 0pt;">
+          6. Wyszukiwanie
+        </button>
+      </a>
+      <a style="margin-left: 10px" href="/goToSettingsPage">
+        <button type="button" class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"></path>
+            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"></path>
+          </svg>
+          Ustawienia
+        </button>
+      </a>
+    </div>
+
+    <!-- Main Page -->
+
+    <div class="row justify-content-md-center" style="margin-top: 2px;">
+      <div class="nav-tabs collapse" id="tab1">
+        <div class="card card-body no1" style="min-height: 680px">
+          <div class="container">
+            <div th:if="${pathsArePresent}">
+              <div class="row" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <h4>Wgraj bazy danych automatycznie</h4>
+              </div>
+              <div class="row" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <a th:href="@{/automaticUploadDatabaseFiles}"><button class="btn btn-success">Wgraj</button></a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 pad"><h4>Wybierz plik z bazą danych</h4></div>
+            </div>
+            <div class="row row-cols-3">
+              <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                <label>Nazwa pliku/Priorytet</label>
+              </div>
+              <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                <label>Data modyfikacji</label>
+              </div>
+              <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                <label>Akcja</label>
+              </div>
+            </div>
+            <div th:if="${dataMods}">
+              <div class="row row-cols-3" th:each="dataMod : ${dataMods}">
+                <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                  <label th:text="${dataMod.name + '('+dataMod.priority+')'}">Nazwa</label>
+                </div>
+                <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                  <label th:text="${dataMod.date}">Data</label>
+                </div>
+                <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                  <a th:href="@{/deleteDataBase/{name}(name=${dataMod.getName()})}">Usuń</a>
+                </div>
+              </div>
+
+              <script>
+                            $(window).on("load",function(){
+                                document.getElementById("but2").style['pointer-events'] = 'auto';
+                                document.getElementById("but3").style['pointer-events'] = 'none';
+                                document.getElementById("but4").style['pointer-events'] = 'none';
+                                if (window.location.hash === "#tab4") {
+                                    document.getElementById("but4").style['pointer-events'] = 'auto';
+                                };
+                            });
+                            </script>
+
+            </div>
+            <div th:if="${dataMods.empty}">
+              <div class= >
+                <div class="col pad">
+                  <label>Brak plików z bazami danych</label>
+
+                  <script>
+<!--                                    $(window).on("load",function(){-->
+                                    $(document).ready(function(){
+                                        document.getElementById("but2").style['pointer-events'] = 'none';
+                                        document.getElementById("but3").style['pointer-events'] = 'none';
+                                        document.getElementById("but4").style['pointer-events'] = 'none';
+                                        $('#tab1').addClass('show');
+                                        if (window.location.hash === "#tab4") {
+                                            document.getElementById("but4").style['pointer-events'] = 'auto';
+                                        };
+                                    });
+                                    </script>
+
+                </div>
+              </div>
+            </div>
+            <form method="POST" action="/uploadDatabaseFile" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-12 pad">
+                  <div class="container mb-3 pad">
+                    <div class="input-group-prepend">
+                      <div class="custom-file">
+                        <input type="file" name="file" class="custom-file-input" id="label" style="cursor: none;color: transparent; width: 0px; height: 0px; background-color:transparent; border:solid transparent 1px; outline: none; position: absolute; z-index: 2000" required>
+                        <label class="custom-file-label pliczek" for="label" aria-describedby="inputGroupFileAddon"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div th:if="${shopsList}">
+                <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                  <div th:each="shop : ${shopsList}" style="margin-right: 10px;flex-grow: 1; text-align: center;">
+                    <label>
+                      <input type="radio" th:name="sallersName" th:value="${shop.name}" />
+                      <span th:text="${shop.name}"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <br/>
+              <br/>
+
+              <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div th:each="shop, shopIndex : ${shopsList}" style="margin-right: 10px;flex-grow: 1; text-align: center;">
+                  <div class="radio">
+                    <label>
+                      <input type="radio" th:name="priorytet" th:value="${shopIndex.index+1}" th:id="${'shop-' + shop.id}" />
+                      <span class="checkmark"></span>
+                    </label>
+                  </div>
+                  <div class="radio-label">
+                    <label th:for="${'shop-' + shop.id}">
+                      Priorytet [[${shopIndex.index+1}]]
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <br/>
+
+              <div class="row" style="margin-left:20px; margin-right:20px;">
+                <div class="col-md-4" > <label for="przelicznik" style="padding-right:100px">Przelicznik</label><input type="text" id="przelicznik" name="przelicznik"/></div>
+                <div class="col-md-4" > <label for="clo" style="padding-right:100px">Cło?</label><input type="text" id="clo" name="clo"/></div>
+                <div class="col-md-4" > <label for="rabat" style="padding-right:100px">Rabat</label><input type="text" id="rabat" name="rabat"/></div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pad"><input id="btd1" onclick="myFunction()" class="btn btn-success" type="submit" value="Zatwierdź" /></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="nav-tabs collapse " id="tab2">
+        <div class="card card-body no2" style="min-height: 680px">
+          <div class="container">
+            <form method="POST" action="/uploadOrderFile" enctype="multipart/form-data">
+              <div class="row">
+                <div class="col-md-12 pad"><h4>Wybierz plik z zamówieniem</h4></div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 pad">
+                  <div class="container mb-3 pad">
+                    <div class="input-group-prepend">
+                      <div class="custom-file">
+                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile1" style="cursor: none;color: transparent; width: 0px; height: 0px; background-color:transparent; border:solid transparent 1px; outline: none; position: absolute; z-index: 2000" required>
+                        <label class="custom-file-label pliczek" for="inputGroupFile1" aria-describedby="inputGroupFileAddon1"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+<!--              <div class="row">`-->
+<!--                <div class="col-md-12 pad">-->
+<!--                  <div class="input-group container mb-3 pad">-->
+<!--                    <div class="input-group-prepend">-->
+<!--                      <label class="input-group-text" for="inputOrderTo">Zamówienie dla:</label>-->
+<!--                    </div>-->
+<!--                    <div th:if="${myShopList}">-->
+<!--                      <select class="custom-select" required id="inputOrderTo" name="zamowienie">-->
+<!--                        <option th:each="myShop : ${myShopList}" th:value="${myShop.name}" th:text="${myShop.name}"></option>-->
+<!--                      </select>-->
+<!--                    </div>-->
+<!--                    <div th:unless="${myShopList}">-->
+<!--                      <h3 style="margin-left:10px">You didnt save any your shops</h3>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+              <div class="row">
+                <div class="col-md-12 pad"><input class="btn btn-success" type="submit" value="Zatwierdź" /></div>
+              </div>
+
+            </form>
+            <div class="row" th:if="${isFreshOrderFile}">
+              <div class="col-md-12 pad">
+                <div class="alert alert-success">
+
+                  <hr style="margin-top: 0px; margin-bottom: 0px;">
+                  <p class="mb-0">Można przejść do zakładki #3</p>
+                </div>
+
+                <script>
+                                    $(window).on("load",function(){
+                                        document.getElementById("but3").style['pointer-events'] = 'auto';
+                                        document.getElementById("but4").style['pointer-events'] = 'none';
+                                        if (window.location.hash === "#tab4") {
+                                            document.getElementById("but4").style['pointer-events'] = 'auto';
+                                        };
+                                    });
+                                    </script>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-tabs collapse" id="tab3">
+        <div class="card card-body no3" style="min-height: 680px">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 pad" style="padding-bottom: 2px"><h4>Aktualizacja parametrów (Krok 1 - 2)</h4></div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 pad" style="padding-top: 2px; padding-bottom: 2px">
+                <a href="/updateProductsFromSallers" id="btd2"><button class="btn btn-warning" onclick="myFunction()">Aktualizacja cenników oraz zamówień</button></a>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 pad" style="padding-top: 5px; padding-bottom: 5px">
+                <div th:if="${updateTime.size()}">
+                  <div class="row row-cols-2" th:each="upTm : ${updateTime}">
+                    <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                      <label th:text="${upTm.getName()}">Nazwa</label>
+                    </div>
+                    <div class="col" style="padding-top: 5px; padding-bottom: 5px;text-align: center">
+                      <label th:text="${upTm.getDatabaseUpdateTime()}">Data modyfikacji</label>
+                    </div>
+                  </div>
+                </div>
+                <div th:if="${size>0}" class="col-md-12 pad" style="padding-top: 5px; padding-bottom: 5px">
+                  <div class="alert alert-warning" >
+                    <p style="margin-bottom: 1px;">Wykonaj aktualizację baz danych w przypadku jakiejkolwiek zmiany w zakładce #1</p>
+                    <hr style="margin-top: 0px; margin-bottom: 0px;">
+                    <p class="mb-0">Nie wykonanie tej operacji może wpłynąć na wynik końcowy wygenerowanych zamówień!!!</p>
+                    <p class="mb-0">Opracja może potrwać kilka minut, w tym czasie nie wyłączaj aplikacji</p>
+
+                    <script>
+                                        $(document).ready(function(){
+                                            document.getElementById("alarm").style.display="none";
+                                        });
+                                        </script>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="alarm" class="row">
+              <div class="col-md-12 pad" style="padding-top: 5px; padding-bottom: 5px">
+                <div th:if="${updateTime.empty}">
+                  <div class="col pad">
+                    <div class="alert alert-danger">
+                      <p>Brak aktualizacji</p>
+                      <hr style="margin-top: 0px; margin-bottom: 0px;">
+                      <p class="mb-0">Wykonaj aktualizację cenników oraz zamówień</p>
+                      <p class="mb-0">Opracja może potrwać kilka minut, w tym czasie nie wyłączaj aplikacji</p>
+                    </div>
+
+                    <script>
+                                        $(document).ready(function(){
+                                            document.getElementById("dbUpdate").style.display="none";
+                                        });
+                                        </script>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+            <form id="dbUpdate" th:action="@{/createOrder}" method="post">
+              <div class="row">
+                <div class="col-md-12 pad"><h4>Wybierz, które bazy (hurtownie) mają być brane pod uwagę przy porównaniu</h4></div>
+              </div>
+
+              <div th:if="${shopsList}">
+                <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                  <div th:each="shop : ${shopsList}" style="margin-right: 10px;flex-grow: 1; text-align: center;">
+                    <label>
+                      <input type="checkbox" th:name="sellers" th:value="${shop.name}" />
+                      <span th:text="${shop.name}"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">`
+                <div class="col-md-12 pad">
+                  <div class="input-group container mb-3 pad">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="inputOrderTo">Zamówienie dla:</label>
+                    </div>
+                    <div th:if="${myShopList}">
+                      <select class="custom-select" required id="inputOrderTo" name="shopName">
+                        <option th:each="myShop : ${myShopList}" th:value="${myShop.name}" th:text="${myShop.name}"></option>
+                      </select>
+                    </div>
+                    <div th:unless="${myShopList}">
+                      <h3 style="margin-left:10px">You didnt save any your shops</h3>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12 pad">
+                  <input id="btd3" class="btn btn-danger" type="submit" value="Rozpocznij tworzenie zamówień" />
+                </div>
+              </div>
+
+            </form>
+            <script>
+                            (function() {
+                                const form = document.querySelector('#dbUpdate');
+                                const checkboxes = form.querySelectorAll('input[type=checkbox]');
+                                const checkboxLength = checkboxes.length;
+                                const firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null;
+
+                                function init() {
+                                    if (firstCheckbox) {
+                                        for (let i = 0; i < checkboxLength; i++) {
+                                            checkboxes[i].addEventListener('change', checkValidity);
+                                        }
+
+                                        checkValidity();
+                                    }
+                                }
+
+                                function isChecked() {
+                                    for (let i = 0; i < checkboxLength; i++) {
+                                        if (checkboxes[i].checked) return true;
+                                    }
+
+                                    return false;
+                                }
+
+                                function checkValidity() {
+                                    const errorMessage = !isChecked() ? 'Wybierz chociaż jedną hurtownie :).' : '';
+                                    firstCheckbox.setCustomValidity(errorMessage);
+                                }
+
+                                init();
+                            })();
+                        </script>
+          </div>
+        </div>
+      </div>
+      <div class="nav-tabs collapse" id="tab4">
+        <div class="card card-body no4" style="min-height: 680px">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 pad">
+                </br></br></br></br></br></br></br></br>
+                <a href="/openFolder"><button class="btn btn-info">Otwórz folder z zamówieniami</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-tabs collapse" id="tab6">
+        <div class="card card-body no4" style="min-height: 680px">
+          <div class="container">
+            <div class="row">
+              <div class="container-fluid d-flex justify-content-center">
+                <div class="card" style="width: 28rem; border: none">
+                  <div class="card-body justify-content-center">
+                    <h5 class="card-title">Wyszukiwarka produktów</h5>
+
+                    <form method="POST" action="/findProductByEanOrName">
+                      <div class="form-check">
+
+                        <input class="form-check-input"  type="radio" name="isEan" id="text" value="false" checked/>
+                        <label class="form-check-label" for="text" style="margin-left: 15px;">
+                          Nazwa produktu
+                        </label>
+
+                        <input class="form-check-input" style="margin-left: 30px;" type="radio" name="isEan" id="ean" value="true">
+                        <label class="form-check-label" for="ean" style="margin-left: 45px;">
+                          Kod kreskowy
+                        </label>
+                        <!--                                            </div>-->
+                        <!--                                            <div class="form-check">-->
+
+                      </div>
+                      <div class="row">
+                        <div class = "col-md-12 pad">
+                          <input class="form-control" type="text" id="eanOrName" name="eanOrName" required>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 pad"><input class="btn btn-success" type="submit" value="Zatwierdź" /></div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <div class="container-fluid d-flex justify-content-center">
+                <div class="thead-light" th:if="${searchedProducts}">
+                  <table class="table table-striped table-light" th:if="${searchedProducts}">
+                    <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">EAN</th>
+                      <th scope="col">Nazwa</th>
+                      <th scope="col">Spiżarnia</th>
+                      <th scope="col">Master Media</th>
+                      <th scope="col">Wabar</th>
+                      <th scope="col">Lemonex</th>
+                      <th scope="col">Kamix</th>
+                      <th scope="col">Stanro</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product:${searchedProducts}">
+                      <th scope="row" th:text="${product.ean}"></th>
+                      <td th:text="${product.name}"></td>
+                      <td th:text="${product.prices[0]}"></td>
+                      <td th:text="${product.prices[1]}">@mdo</td>
+                      <td th:text="${product.prices[2]}">@mdo</td>
+                      <td th:text="${product.prices[3]}">@mdo</td>
+                      <td th:text="${product.prices[4]}">@mdo</td>
+                      <td th:text="${product.prices[5]}">@mdo</td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    function myFunction(){
+        $('[data-toggle=collapse]').prop('disabled',true);
+        $('.btn').addClass('disabled');
+        $('.loading').fadeIn(2000);
+        document.getElementById("btd2").style['pointer-events'] = 'none';
+        document.getElementById("btd3").style['pointer-events'] = 'none';
+        $('*').css('cursor', 'wait');
+    }
+    </script>
+
+<script>
+function selectTo(){
+    var e = document.getElementById("inputOrderTo");
+    }
+</script>
+</body>
+</html>

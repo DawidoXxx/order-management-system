@@ -82,18 +82,24 @@
             <h5 class="card-title">Config</h5>
             <h6 class="card-subtitle mb-2 text-muted">OrderManagement</h6>
             <p class="card-text">Just be carefull changing settings :)</p>
-            <form class="form-group" method="POST" action="/saveSettingsForFile">
+            <form class="form-group" method="POST" th:action="@{/saveSettingsForFile}">
                 <label for="whatFile">Choose a file to change a settings</label><br/>
 
                 <!-- field for file name -->
                 <select class="form-control" name="whatFile" id="whatFile">
                     <option value="OrderToProcess">Order input file</option>
                     <option value="OrderToSendMaster">Master Media output file</option>
+                    <option value="MasterMediaDB">Master Media database file</option>
                     <option value="OrderToSendWabar">Wabar output file</option>
+                    <option value="WabarDB">Wabar database file</option>
                     <option value="OrderToSendSpizarnia">Spiżarnia output file</option>
+                    <option value="SpiżarniaDB">Spiżarnia database file</option>
                     <option value="OrderToSendLemonex">Lemonex output file</option>
+                    <option value="LemonexDB">Lemonex database file</option>
                     <option value="OrderToSendKamix">Kamix output file</option>
+                    <option value="KamixDB">Kamix database file</option>
                     <option value="OrderToSendStanro">Stanro output file</option>
+                    <option value="StanroDB">Stanro database file</option>
                     <option value="OrderToSendMain">Main output file</option>
                     <option value="OrderNotFound">Not found file</option>
                 </select><br/>

@@ -45,6 +45,10 @@ public class Product {
         productsFromSellers.add(product);
     }
 
+    public void addProductsFromSellers(List<ProductFromSeller>list){
+        productsFromSellers.addAll(list);
+    }
+
     //There are different names in sellers database files for the same product
     //So we gonna to put all in one field and search within this field
     public void addNameToSearchField(@NonNull String nameFromAnotherSeller){

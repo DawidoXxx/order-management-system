@@ -2,10 +2,12 @@ package com.zygadlo.ordermanagementsystem.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class ProductFromSeller {
+@NoArgsConstructor
+public class ProductFromSeller implements Comparable{
 
     private String sellerName;
     private int priority;
@@ -19,5 +21,21 @@ public class ProductFromSeller {
         this.priority = priority;
         this.price = price;
         this.sellersCode = sellersCode;
+    }
+
+    //compare by price if even compare by priority
+    @Override
+    public int compareTo(Object productToCompare) {
+        ProductFromSeller product = (ProductFromSeller)productToCompare;
+        if (product.price>this.price)
+            return -1;
+        else if(product.price<this.price)
+            return 1;
+        else{
+            if (product.priority>this.getPriority())
+                return -1;
+            else
+                return 1;
+        }
     }
 }

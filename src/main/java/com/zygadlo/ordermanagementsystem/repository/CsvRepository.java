@@ -2,8 +2,6 @@ package com.zygadlo.ordermanagementsystem.repository;
 
 import com.zygadlo.ordermanagementsystem.model.DataFromDatabase;
 import com.zygadlo.ordermanagementsystem.model.FileSettings;
-import com.zygadlo.ordermanagementsystem.model.Product;
-import org.springframework.aot.generate.InMemoryGeneratedFiles;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -21,10 +19,11 @@ public class CsvRepository implements DataRepository{
     private String databasePath;
 
     @Override
-    public Map<String, DataFromDatabase> getDataFromDatabase(File file, FileSettings settings) {
+    public Map<String, DataFromDatabase> getDataFromDatabase(File file, FileSettings settings){
 
         Map<String,DataFromDatabase> productMap = new HashMap<>();
-        Map<String,Integer> fieldOrder = reverseMap(settings.getFieldsOrderMap());
+        Map<String,Integer> fieldOrder;
+        fieldOrder = reverseMap(settings.getFieldsOrderMap());
 
         BufferedReader bufferedReader;
         String readedLine;
@@ -40,7 +39,7 @@ public class CsvRepository implements DataRepository{
                     continue;
 
                 String priceString = readedFields[fieldOrder.get(FileSettings.Fields.PRICE.name())];
-                Double price = Double.parseDouble(priceString);
+                Double price = Double.parseDouble(priceString.replace(",","."));
 
                 productMap.put(readedFields[fieldOrder.get(FileSettings.Fields.EAN.name())],
                         new DataFromDatabase(price,readedFields[fieldOrder.get(FileSettings.Fields.SELLERCODE.name())],

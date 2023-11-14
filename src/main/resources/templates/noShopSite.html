@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Error</title>
 </head>
 <body>
-    <H1>You forgot to add your own shops in setting page</H1>
-
-    <a th:href="@{/}"><button></button></a>
+<div class="container">
+    <div class="d-flex flex-column align-items-center">
+        <h1 class="mt-5">You forgot to add your own shops in the setting page</h1>
+        <a th:href="@{/}" class="btn btn-primary mt-3">Go back</a>
+    </div>
+</div>
 </body>
 </html>

@@ -180,19 +180,19 @@
           4. Otwórz folder z zamówieniami
         </button>
       </a>
-      <!--Add-->
+
+<!--      <a id="but7" href="#tab5" style="color:#fff;text-decoration: none">-->
+<!--        <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#tab5" aria-expanded="false" aria-controls="tab5" data-parent="#accordion" style="border-radius: 0pt;">-->
+<!--          5. Sprawdzanie zamówień-->
+<!--        </button>-->
+<!--      </a>-->
+
       <a id="but5" href="#tab5" style="color:#fff;text-decoration: none">
-        <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#tab5" aria-expanded="false" aria-controls="tab5" data-parent="#accordion" style="border-radius: 0pt;">
-          5. Sprawdzanie zamówień
+        <button class = "btn btn-info" type="button" data-toggle="collapse" data-target="#tab5" aria-expanded="false" aria-controls="tab5" data-parent="#accordion" style="border-top-right-radius: 5pt; border-bottom-right-radius: 5pt; border-top-left-radius: 0pt; border-bottom-left-radius: 0pt;">
+          5. Wyszukiwanie
         </button>
       </a>
-      <!--Add-->
-      <a id="but6" href="#tab6" style="color:#fff;text-decoration: none">
-        <button class = "btn btn-info" type="button" data-toggle="collapse" data-target="#tab6" aria-expanded="false" aria-controls="tab6" data-parent="#accordion" style="border-top-right-radius: 5pt; border-bottom-right-radius: 5pt; border-top-left-radius: 0pt; border-bottom-left-radius: 0pt;">
-          6. Wyszukiwanie
-        </button>
-      </a>
-      <a style="margin-left: 10px" href="/goToSettingsPage">
+      <a style="margin-left: 10px" href="/settings">
         <button type="button" class="btn btn-primary">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
             <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"></path>
@@ -202,9 +202,10 @@
         </button>
       </a>
     </div>
+  </div>
 
     <!-- Main Page -->
-
+    <div class="row justify-content-md-center" id="accordion1">
     <div class="row justify-content-md-center" style="margin-top: 2px;">
       <div class="nav-tabs collapse" id="tab1">
         <div class="card card-body no1" style="min-height: 680px">
@@ -543,14 +544,41 @@
             <div class="row">
               <div class="col-md-12 pad">
                 </br></br></br></br></br></br></br></br>
-                <a href="/openFolder"><button class="btn btn-info">Otwórz folder z zamówieniami</button></a>
+<!--                <a href="/openFolder"><button class="btn btn-info">Pobierz pliki</button></a>-->
+                <a href="/zip-download"><button class="btn btn-info">Pobierz pliki</button> </a>
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                    $(document).ready(function () {
+                        $("#downloadButton").click(function () {
+                            $.ajax({
+                               type: "GET",
+                               url: "/download-generated-files",
+                               success: function (data) {
+                                   // Utwórz link do pobrania wielu plików
+                                   var zipBlob = new Blob(data, { type: 'application/zip' });
+                                   var url = window.URL.createObjectURL(zipBlob);
+                                   var a = document.createElement('a');
+                                   a.href = url;
+                                   a.download = 'files.zip';
+                                   document.body.appendChild(a);
+                                   a.click();
+                                   window.URL.revokeObjectURL(url);
+                               },
+                                error: function (error) {
+                                   console.error("Wystąpił błąd: " + JSON.stringify(error));
+                               }
+                           });
+                       });
+                   });
+                </script>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="nav-tabs collapse" id="tab6">
+      <div class="nav-tabs collapse" id="tab5">
         <div class="card card-body no4" style="min-height: 680px">
           <div class="container">
             <div class="row">
@@ -571,8 +599,6 @@
                         <label class="form-check-label" for="ean" style="margin-left: 45px;">
                           Kod kreskowy
                         </label>
-                        <!--                                            </div>-->
-                        <!--                                            <div class="form-check">-->
 
                       </div>
                       <div class="row">

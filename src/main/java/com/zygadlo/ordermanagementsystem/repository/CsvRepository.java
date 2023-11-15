@@ -2,24 +2,21 @@ package com.zygadlo.ordermanagementsystem.repository;
 
 import com.zygadlo.ordermanagementsystem.model.DataFromDatabase;
 import com.zygadlo.ordermanagementsystem.model.FileSettings;
-import org.springframework.beans.factory.annotation.Value;
+import com.zygadlo.ordermanagementsystem.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 @Repository
 public class CsvRepository implements DataRepository{
 
-    @Value("${upload.database}")
-    private String databasePath;
+    private static final Logger logger = LoggerFactory.getLogger(CsvRepository.class);
 
-    @Override
-    public Map<String, DataFromDatabase> getDataFromDatabase(File file, FileSettings settings){
+    public Map<String,DataFromDatabase> getDataFromReader(Reader reader,FileSettings settings){
 
         Map<String,DataFromDatabase> productMap = new HashMap<>();
         Map<String,Integer> fieldOrder;
@@ -30,7 +27,7 @@ public class CsvRepository implements DataRepository{
         String[] readedFields;
 
         try{
-            bufferedReader = new BufferedReader(new FileReader(file.getAbsolutePath()));
+            bufferedReader = new BufferedReader(reader);
 
             while((readedLine = bufferedReader.readLine())!=null){
                 readedFields = readedLine.split(settings.getSeparator());
@@ -47,13 +44,18 @@ public class CsvRepository implements DataRepository{
             }
 
         }catch (IOException exception){
-
+            logger.error("There is no such file");
         }
 
         return productMap;
     }
 
-    private Map<String,Integer> reverseMap(Map<Integer,String> map){
+    @Override
+    public Map<String, DataFromDatabase> getDataFromDatabase(File file, FileSettings settings) throws FileNotFoundException {
+            return getDataFromReader(new FileReader(file),settings);
+    }
+
+    public Map<String,Integer> reverseMap(Map<Integer,String> map){
         Map<String, Integer> reverseMap = new HashMap<>();
         for (Map.Entry<Integer,String> entry: map.entrySet()) {
             reverseMap.put(entry.getValue(), entry.getKey());

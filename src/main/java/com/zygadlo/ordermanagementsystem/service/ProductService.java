@@ -23,7 +23,7 @@ public class ProductService {
     private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
 
     @Value("${upload.database}")
-    public String databaseFilesPath;
+    private String databaseFilesPath;
     private final FileStructureRepository fileStructureRepository;
     private final CsvRepository csvRepository;
     private final ExcelRepository excelRepository;
@@ -61,19 +61,19 @@ public class ProductService {
         return Optional.ofNullable(directory.listFiles()).orElse(new File[0]);
     }
 
-    private void saveToMongoDatabase(Map<String,DataFromDatabase> mapToSaveToDB,String name){
+    public void saveToMongoDatabase(Map<String,DataFromDatabase> mapToSaveToDB,String nameOfDatabase){
 
         //get default value of 1 if not saved,
         //priority is a second value to compare after price are the same
-        int priority = sellerRepository.findByName(name) != null ?
-                sellerRepository.findByName(name).getPriority() : 1;
+        int priority = sellerRepository.findByName(nameOfDatabase) != null ?
+                sellerRepository.findByName(nameOfDatabase).getPriority() : 1;
 
         mapToSaveToDB.forEach((ean,data)->{
             Product product = productRepository.existsByEan(ean)?
                     productRepository.findByEan(ean):
                     new Product(ean,data.getNameOfProduct());
 
-            ProductFromSeller productFromSeller = new ProductFromSeller(name,priority,data.getPrice(),data.getSallersCode());
+            ProductFromSeller productFromSeller = new ProductFromSeller(nameOfDatabase,priority,data.getPrice(),data.getSallersCode());
             product.addProductFromSeller(productFromSeller);
             product.addNameToSearchField(data.getNameOfProduct());
             productRepository.save(product);

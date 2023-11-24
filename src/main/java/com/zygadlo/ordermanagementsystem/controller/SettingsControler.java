@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 
 @Controller
-@RequestMapping("settings")
 public class SettingsControler {
 
     private SettingsService settingsService;
@@ -22,7 +21,7 @@ public class SettingsControler {
     }
 
     //TODO: make fileSettings html page
-    @GetMapping("/")
+    @GetMapping("/settings")
     public String goToSettings(){
         return "fileSettings";
     }
@@ -44,7 +43,7 @@ public class SettingsControler {
         if (settingsService.checkIfValidFieldsOrder(fieldsOrder,whatFile))
             settingsService.saveOrUpdateFileSettings(whatFile,extension,separator,fieldsOrder);
         else
-            return "redirect:/?error=true";
+            return "redirect:/?error=true";//or dedicated site
 
         return "redirect:/#tab1";
     }
